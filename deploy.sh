@@ -4,7 +4,7 @@
 
 # Configuration - Update these variables
 S3_BUCKET="rr-ricklin-credentials"
-S3_PATH="builds/lambda/close-ec2-lambda"
+S3_PATH="builds/lambda/rr-lambda-close-ec2"
 AWS_REGION="ap-east-2"
 
 # Get git commit ID (short 8 character version)
