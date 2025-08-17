@@ -3,8 +3,8 @@
 # Script to zip Lambda function and upload to S3 with git commit ID as filename
 
 # Configuration - Update these variables
-S3_BUCKET="your-lambda-deployment-bucket"
-AWS_REGION="us-east-1"
+S3_BUCKET="rr-ricklin-credentials"
+AWS_REGION="ap-east-2"
 
 # Get git commit ID
 COMMIT_ID=$(git rev-parse HEAD)
@@ -50,7 +50,7 @@ rm -rf "${TEMP_DIR}"
 
 # Upload to S3
 echo "Uploading ${PACKAGE_NAME} to S3 bucket: ${S3_BUCKET}"
-aws s3 cp "${PACKAGE_NAME}" "s3://${S3_BUCKET}/${PACKAGE_NAME}" --region "${AWS_REGION}"
+aws s3 cp "${PACKAGE_NAME}" "s3://${S3_BUCKET}/builds/lamdba/${PACKAGE_NAME}" --region "${AWS_REGION}"
 
 if [ $? -eq 0 ]; then
     echo "Successfully uploaded to S3: s3://${S3_BUCKET}/${PACKAGE_NAME}"

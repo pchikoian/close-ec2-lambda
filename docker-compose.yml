@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  lambda-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - ~/.aws:/root/.aws:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - AWS_PROFILE=${AWS_PROFILE:-rick}
+      - AWS_REGION=${AWS_REGION:-ap-east-2}
+      - S3_BUCKET=${S3_BUCKET:-rr-ricklin-credentials}
+    working_dir: /app
+    # command: ["tail", "-f", "/dev/null"]
+    
+  # lambda-build-only:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - .:/app
+  #   working_dir: /app
+  #   command: /bin/bash -c "
+  #     COMMIT_ID=$$(git rev-parse HEAD) &&
+  #     PACKAGE_NAME=close-ec2-lambda-$$COMMIT_ID.zip &&
+  #     echo 'Creating deployment package: '$$PACKAGE_NAME &&
+  #     TEMP_DIR=$$(mktemp -d) &&
+  #     cp lambda_function.py $$TEMP_DIR/ &&
+  #     pip install -r requirements.txt -t $$TEMP_DIR/ --no-user &&
+  #     cd $$TEMP_DIR &&
+  #     zip -r ../$$PACKAGE_NAME . &&
+  #     cd - &&
+  #     mv $$TEMP_DIR/../$$PACKAGE_NAME . &&
+  #     rm -rf $$TEMP_DIR &&
+  #     echo 'Package created: '$$PACKAGE_NAME
+  #   "
