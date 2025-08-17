@@ -2,10 +2,10 @@
 
 # Script to zip Lambda function and upload to S3 with git commit ID as filename
 
-# Configuration - Update these variables
-S3_BUCKET="rr-ricklin-credentials"
-S3_PATH="builds/lambda/rr-lambda-close-ec2"
-AWS_REGION="ap-east-2"
+# Configuration - Get from environment or use defaults
+S3_BUCKET="${S3_BUCKET:-rr-ricklin-credentials}"
+S3_PATH="${S3_PATH:-builds/lambda/rr-lambda-close-ec2}"
+AWS_REGION="${AWS_REGION:-ap-east-2}"
 
 # Get git commit ID (short 8 character version)
 COMMIT_ID=$(git rev-parse --short=8 HEAD)

@@ -13,7 +13,7 @@ services:
       - AWS_PROFILE=${AWS_PROFILE:-rick}
       - AWS_REGION=${AWS_REGION:-ap-east-2}
       - S3_BUCKET=${S3_BUCKET:-rr-ricklin-credentials}
-      - S3_PATH=${S3_PATH:-close-ec2-lambda}
+      - S3_PATH=${S3_PATH:-builds/lambda/rr-lambda-close-ec2}
     working_dir: /app
     # command: ["tail", "-f", "/dev/null"]
     
