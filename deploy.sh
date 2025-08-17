@@ -4,17 +4,18 @@
 
 # Configuration - Update these variables
 S3_BUCKET="rr-ricklin-credentials"
+S3_PATH="builds/lambda/close-ec2-lambda"
 AWS_REGION="ap-east-2"
 
-# Get git commit ID
-COMMIT_ID=$(git rev-parse HEAD)
+# Get git commit ID (short 8 character version)
+COMMIT_ID=$(git rev-parse --short=8 HEAD)
 if [ $? -ne 0 ]; then
     echo "Error: Not a git repository or git not found"
     exit 1
 fi
 
 # Create deployment package name
-PACKAGE_NAME="close-ec2-lambda-${COMMIT_ID}.zip"
+PACKAGE_NAME="${COMMIT_ID}.zip"
 
 echo "Creating deployment package: ${PACKAGE_NAME}"
 
@@ -50,10 +51,10 @@ rm -rf "${TEMP_DIR}"
 
 # Upload to S3
 echo "Uploading ${PACKAGE_NAME} to S3 bucket: ${S3_BUCKET}"
-aws s3 cp "${PACKAGE_NAME}" "s3://${S3_BUCKET}/builds/lamdba/${PACKAGE_NAME}" --region "${AWS_REGION}"
+aws s3 cp "${PACKAGE_NAME}" "s3://${S3_BUCKET}/${S3_PATH}/${PACKAGE_NAME}" --region "${AWS_REGION}"
 
 if [ $? -eq 0 ]; then
-    echo "Successfully uploaded to S3: s3://${S3_BUCKET}/${PACKAGE_NAME}"
+    echo "Successfully uploaded to S3: s3://${S3_BUCKET}/${S3_PATH}/${PACKAGE_NAME}"
     echo "Git commit ID: ${COMMIT_ID}"
     
     # Optional: Remove local zip file

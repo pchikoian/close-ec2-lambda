@@ -4,8 +4,8 @@
 DOCKER_COMPOSE = docker compose
 SERVICE_NAME = lambda-builder
 IMAGE_NAME = close-ec2-lambda
-COMMIT_ID = $(shell git rev-parse HEAD)
-PACKAGE_NAME = close-ec2-lambda-$(COMMIT_ID).zip
+COMMIT_ID = $(shell git rev-parse --short=8 HEAD)
+PACKAGE_NAME = $(COMMIT_ID).zip
 
 # Default target
 help: ## Show this help message
@@ -18,18 +18,6 @@ build: ## Build the Docker image
 
 deploy: ## Build and deploy Lambda function to S3
 	$(DOCKER_COMPOSE) up $(SERVICE_NAME)
-
-build-local: ## Build package locally without Docker
-	@echo "Creating deployment package: $(PACKAGE_NAME)"
-	@TEMP_DIR=$$(mktemp -d) && \
-	cp lambda_function.py "$$TEMP_DIR/" && \
-	pip install -r requirements.txt -t "$$TEMP_DIR/" --no-user && \
-	cd "$$TEMP_DIR" && \
-	zip -r "../$(PACKAGE_NAME)" . && \
-	cd - && \
-	mv "$$TEMP_DIR/../$(PACKAGE_NAME)" . && \
-	rm -rf "$$TEMP_DIR" && \
-	echo "Package created: $(PACKAGE_NAME)"
 
 ##@ Testing & Quality
 test: ## Run tests (placeholder)
@@ -45,7 +33,7 @@ lint: ## Lint Python code
 ##@ Maintenance
 clean: ## Clean up build artifacts and Docker resources
 	@echo "Cleaning up..."
-	@rm -f close-ec2-lambda-*.zip
+	@rm -f *.zip
 	@$(DOCKER_COMPOSE) down --rmi all --volumes --remove-orphans 2>/dev/null || true
 	@docker system prune -f
 
